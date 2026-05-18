@@ -1547,7 +1547,8 @@
      NEWSLETTER POPUP
 ================================================================ -->
 <div class="popup-wrap" id="popupWrap" role="dialog" aria-modal="true"
-     aria-labelledby="popupH" aria-describedby="popupP" aria-hidden="true">
+     aria-labelledby="popupH" aria-describedby="popupP" aria-hidden="true"
+     style="display:none">
     <div class="popup" role="document">
         <button class="popup-x" id="popupClose" aria-label="Popup schließen">
             <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -2186,7 +2187,10 @@
 
     function openPopup() {
         if (sessionStorage.getItem('nlDone')) return;
-        wrap.classList.add('show');
+        wrap.style.display = 'flex';
+        requestAnimationFrame(function () {
+            wrap.classList.add('show');
+        });
         wrap.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden';
         setTimeout(function () {
@@ -2199,6 +2203,7 @@
         wrap.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         sessionStorage.setItem('nlDone', '1');
+        setTimeout(function () { wrap.style.display = 'none'; }, 400);
     }
 
     setTimeout(openPopup, 3000);
