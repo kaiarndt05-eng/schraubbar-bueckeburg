@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum – SchraubBar Bückeburg</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://schraubbar-bueckeburg.de/impressum.html">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black:     #080808;
+            --black-2:   #111111;
+            --black-3:   #1a1a1a;
+            --orange:    #FF6B00;
+            --cream:     #F5F0E8;
+            --cream-dim: rgba(245,240,232,0.55);
+            --gray:      #777777;
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-body:    'Figtree', sans-serif;
+            --font-mono:    'Courier Prime', monospace;
+            --nav-h:  70px;
+            --gutter: clamp(20px, 5vw, 64px);
+            --max-w:  860px;
+            --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; }
+        body { background: var(--black); color: var(--cream); font-family: var(--font-body); line-height: 1.7; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; background: none; font: inherit; }
+
+        body::before {
+            content: ''; position: fixed; inset: 0; z-index: 999; pointer-events: none; opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--gutter); }
+
+        /* NAV */
+        .nav {
+            position: fixed; inset: 0 0 auto; z-index: 800; height: var(--nav-h);
+            background: rgba(8,8,8,0.90); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,107,0,0.18);
+        }
+        .nav-row { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+        .nav-logo img { height: 44px; width: auto; display: block; }
+        .nav-links { list-style: none; display: flex; align-items: center; gap: 34px; }
+        .nav-links a { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-dim); position: relative; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--orange); }
+        .nav-cta { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--black); background: var(--orange); padding: 10px 22px; transition: background 0.2s; }
+        .nav-cta:hover { background: #ff8c00; }
+        .burger { display: none; flex-direction: column; gap: 5px; padding: 8px; }
+        .burger span { display: block; width: 24px; height: 2px; background: var(--cream); transition: transform 0.3s, opacity 0.3s; }
+        .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .burger.open span:nth-child(2) { opacity: 0; }
+        .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .mob-nav { display: none; position: fixed; top: var(--nav-h); inset: auto 0 0; background: var(--black-2); flex-direction: column; padding: 32px var(--gutter) 48px; border-top: 1px solid var(--orange); z-index: 799; }
+        .mob-nav.open { display: flex; }
+        .mob-nav a { font-family: var(--font-display); font-size: 38px; color: var(--cream); padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.07); transition: color 0.2s, padding-left 0.2s; }
+        .mob-nav a:hover { color: var(--orange); padding-left: 10px; }
+
+        /* PAGE */
+        .page-header { padding-top: calc(var(--nav-h) + 72px); padding-bottom: 56px; position: relative; overflow: hidden; }
+        .page-header-ghost { position: absolute; top: var(--nav-h); right: -30px; font-family: var(--font-display); font-size: clamp(100px, 18vw, 220px); color: rgba(255,107,0,0.04); line-height: 1; pointer-events: none; user-select: none; }
+        .tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--orange); display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .tag::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--orange); }
+        .page-h { font-family: var(--font-display); font-size: clamp(56px, 10vw, 110px); line-height: 0.9; letter-spacing: 0.025em; color: var(--cream); }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); margin-bottom: 36px; transition: color 0.2s; }
+        .back-link:hover { color: var(--orange); }
+        .back-link svg { width: 14px; height: 14px; }
+
+        /* CONTENT */
+        .content { padding-bottom: clamp(72px, 9vw, 128px); }
+        .content section { margin-bottom: 52px; }
+        .content h2 { font-family: var(--font-display); font-size: 32px; letter-spacing: 0.04em; color: var(--orange); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,107,0,0.18); }
+        .content h3 { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em; color: var(--cream); margin: 24px 0 10px; }
+        .content p { font-size: 15.5px; color: var(--cream-dim); margin-bottom: 14px; }
+        .content p:last-child { margin-bottom: 0; }
+        .content a { color: var(--orange); transition: opacity 0.2s; }
+        .content a:hover { opacity: 0.75; }
+        .content ul { padding-left: 20px; margin-bottom: 14px; }
+        .content ul li { font-size: 15.5px; color: var(--cream-dim); margin-bottom: 6px; }
+        .placeholder { display: inline-block; background: rgba(255,107,0,0.12); border: 1px dashed rgba(255,107,0,0.4); color: var(--orange); font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; }
+
+        /* FOOTER */
+        footer { background: var(--black-2); padding: 38px 0; border-top: 1px solid rgba(255,107,0,0.12); }
+        .foot-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px; }
+        .foot-logo img { height: 40px; width: auto; display: block; }
+        .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+        .foot-links a { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); transition: color 0.2s; }
+        .foot-links a:hover { color: var(--orange); }
+        .foot-copy { width: 100%; text-align: center; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; color: #3a3a3a; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.04); }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta { display: none; }
+            .burger { display: flex; }
+            .foot-row { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+    <div class="wrap nav-row">
+        <a href="index.html" class="nav-logo"><img src="logo.png" alt="SchraubBar Bückeburg"></a>
+        <ul class="nav-links" role="list">
+            <li><a href="events.html">Events</a></li>
+            <li><a href="index.html#galerie">Galerie</a></li>
+            <li><a href="index.html#menu">Essen</a></li>
+            <li><a href="index.html#menu">Drinks</a></li>
+            <li><a href="index.html#kontakt">Kontakt</a></li>
+        </ul>
+        <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
+        <button class="burger" id="burger" aria-label="Menü öffnen/schließen" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+<div class="mob-nav" id="mobNav">
+    <a href="events.html" class="mob-lnk">Events</a>
+    <a href="index.html#galerie" class="mob-lnk">Galerie</a>
+    <a href="index.html#menu" class="mob-lnk">Essen</a>
+    <a href="index.html#menu" class="mob-lnk">Drinks</a>
+    <a href="index.html#kontakt" class="mob-lnk">Kontakt</a>
+</div>
+
+<div class="page-header">
+    <div class="page-header-ghost" aria-hidden="true">IMP</div>
+    <div class="wrap">
+        <a href="index.html" class="back-link">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 7H1M7 1L1 7l6 6"/></svg>
+            Zurück zur Startseite
+        </a>
+        <p class="tag">Rechtliches</p>
+        <h1 class="page-h">IMPRES&shy;SUM</h1>
+    </div>
+</div>
+
+<main class="content">
+    <div class="wrap">
+
+        <section>
+            <h2>Angaben gemäß § 5 TMG</h2>
+            <p>
+                <strong style="color:var(--cream);">SchraubBar Bückeburg</strong><br>
+                Sinan Sahin<br>
+                Lehnstraße 1<br>
+                31675 Bückeburg<br>
+                Deutschland
+            </p>
+        </section>
+
+        <section>
+            <h2>Kontakt</h2>
+            <p>
+                Telefon: <a href="tel:+4915154981779">01515 – 49 81 779</a><br>
+                E-Mail: <a href="mailto:moin@schraubbar-bueckeburg.de">moin@schraubbar-bueckeburg.de</a>
+            </p>
+        </section>
+
+        <section>
+            <h2>Umsatzsteuer-ID</h2>
+            <p>
+                Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br>
+                <span class="placeholder">Bitte ergänzen</span>
+            </p>
+        </section>
+
+        <section>
+            <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+            <p>
+                Sinan Sahin<br>
+                Lehnstraße 1<br>
+                31675 Bückeburg
+            </p>
+        </section>
+
+        <section>
+            <h2>Haftung für Inhalte</h2>
+            <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+            <p>Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+        </section>
+
+        <section>
+            <h2>Haftung für Links</h2>
+            <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
+            <p>Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+        </section>
+
+        <section>
+            <h2>Urheberrecht</h2>
+            <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+            <p>Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+        </section>
+
+        <section>
+            <h2>Streitschlichtung</h2>
+            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a></p>
+            <p>Unsere E-Mail-Adresse finden Sie oben im Impressum. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+        </section>
+
+    </div>
+</main>
+
+<footer>
+    <div class="wrap">
+        <div class="foot-row">
+            <a href="index.html"><img src="logo.png" alt="SchraubBar Bückeburg" style="height:40px;width:auto;display:block;"></a>
+            <nav class="foot-links">
+                <a href="index.html#about">Über uns</a>
+                <a href="events.html">Events</a>
+                <a href="index.html#menu">Menü</a>
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+            </nav>
+        </div>
+        <p class="foot-copy">© 2025 SchraubBar Bückeburg · Lehnstraße 1, 31675 Bückeburg</p>
+    </div>
+</footer>
+
+<script>
+(function(){
+    var burger = document.getElementById('burger');
+    var mobNav = document.getElementById('mobNav');
+    burger.addEventListener('click', function(){
+        var open = mobNav.classList.toggle('open');
+        burger.classList.toggle('open', open);
+        burger.setAttribute('aria-expanded', open);
+    });
+    document.querySelectorAll('.mob-lnk').forEach(function(l){
+        l.addEventListener('click', function(){
+            mobNav.classList.remove('open');
+            burger.classList.remove('open');
+            burger.setAttribute('aria-expanded','false');
+        });
+    });
+}());
+</script>
+</body>
+</html>
