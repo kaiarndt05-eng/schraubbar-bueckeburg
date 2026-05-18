@@ -2138,6 +2138,12 @@
 (function () {
     'use strict';
 
+    /* ------ Scroll-Restaurierung deaktivieren ------ */
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     /* ------ Video section fallback ------ */
     var sVid = document.getElementById('sectionVideo');
     var vPh  = document.getElementById('videoPh');
