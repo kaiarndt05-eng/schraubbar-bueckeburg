@@ -25,9 +25,8 @@
     <!-- Canonical -->
     <link rel="canonical" href="https://schraubbar-bueckeburg.de/">
     <link rel="icon" type="image/png" href="logo.png">
-    <!-- Leaflet (custom map) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN2GqGg=" crossorigin=""></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <!-- Structured Data: LocalBusiness -->
     <script type="application/ld+json">
@@ -2465,49 +2464,6 @@
         fadeEls.forEach(function (el) { el.classList.add('on'); });
     }
 
-    /* ------ Leaflet Map ------ */
-    (function initMap() {
-        var el = document.getElementById('contactMap');
-        if (!el) return;
-
-        var lat = 52.27867, lng = 9.04812;
-
-        var map = L.map('contactMap', {
-            center: [lat, lng],
-            zoom: 17,
-            scrollWheelZoom: false,
-            zoomControl: true
-        });
-
-        /* Dark tiles: CartoDB Dark Matter */
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 20
-        }).addTo(map);
-
-        /* Custom orange SVG pin */
-        var pin = L.divIcon({
-            className: '',
-            iconSize:   [36, 50],
-            iconAnchor: [18, 50],
-            popupAnchor:[0, -52],
-            html: '<svg width="36" height="50" viewBox="0 0 36 50" fill="none" xmlns="http://www.w3.org/2000/svg">'
-                + '<path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 32 18 32S36 31.5 36 18C36 8.06 27.94 0 18 0z" fill="#FF6B00"/>'
-                + '<circle cx="18" cy="18" r="7" fill="#080808"/>'
-                + '</svg>'
-        });
-
-        /* Popup content */
-        var popup = '<div class="map-popup-title">SCHRAUBBAR</div>'
-            + '<div class="map-popup-addr">Lehnstraße 1<br>31675 Bückeburg</div>'
-            + '<a href="tel:+4915154981779" class="map-popup-link">01515 – 49 81 779</a>';
-
-        L.marker([lat, lng], { icon: pin })
-            .addTo(map)
-            .bindPopup(popup)
-            .openPopup();
-    })();
 
     /* ------ Smooth anchor scroll (offset for sticky nav) ------ */
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
@@ -2523,6 +2479,46 @@
         });
     });
 
+}());
+</script>
+<!-- Leaflet JS + Map Init (außerhalb des Haupt-IIFE, nach DOM-Aufbau) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+    var lat = 52.27867, lng = 9.04812;
+
+    var map = L.map('contactMap', {
+        center: [lat, lng],
+        zoom: 17,
+        scrollWheelZoom: false,
+        zoomControl: true
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    }).addTo(map);
+
+    var pin = L.divIcon({
+        className: '',
+        iconSize:    [36, 50],
+        iconAnchor:  [18, 50],
+        popupAnchor: [0, -52],
+        html: '<svg width="36" height="50" viewBox="0 0 36 50" fill="none" xmlns="http://www.w3.org/2000/svg">'
+            + '<path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 32 18 32S36 31.5 36 18C36 8.06 27.94 0 18 0z" fill="#FF6B00"/>'
+            + '<circle cx="18" cy="18" r="7" fill="#080808"/>'
+            + '</svg>'
+    });
+
+    var popup = '<div class="map-popup-title">SCHRAUBBAR</div>'
+        + '<div class="map-popup-addr">Lehnstraße 1<br>31675 Bückeburg</div>'
+        + '<a href="tel:+4915154981779" class="map-popup-link">01515 – 49 81 779</a>';
+
+    L.marker([lat, lng], { icon: pin })
+        .addTo(map)
+        .bindPopup(popup)
+        .openPopup();
 }());
 </script>
 </body>
