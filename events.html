@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alle Events – SchraubBar Bückeburg</title>
+    <meta name="description" content="Alle kommenden Events der SchraubBar Bückeburg. Live-Musik, Karaoke, Special Events und mehr.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://schraubbar-bueckeburg.de/events.html">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Alle Events – SchraubBar Bückeburg">
+    <meta property="og:description" content="Alle kommenden Events der SchraubBar Bückeburg.">
+    <meta property="og:url" content="https://schraubbar-bueckeburg.de/events.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black:      #080808;
+            --black-2:    #111111;
+            --black-3:    #1a1a1a;
+            --orange:     #FF6B00;
+            --orange-dim: rgba(255,107,0,0.12);
+            --orange-glow:rgba(255,107,0,0.35);
+            --cream:      #F5F0E8;
+            --cream-dim:  rgba(245,240,232,0.55);
+            --gray:       #777777;
+            --gray-dark:  #333333;
+
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-body:    'Figtree', sans-serif;
+            --font-mono:    'Courier Prime', monospace;
+
+            --nav-h:  70px;
+            --gutter: clamp(20px, 5vw, 64px);
+            --max-w:  1200px;
+            --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            background: var(--black);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.65;
+            overflow-x: hidden;
+        }
+        a    { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; background: none; font: inherit; }
+
+        /* Grain */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 999;
+            pointer-events: none; opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        .wrap {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 var(--gutter);
+        }
+
+        /* ---- NAV ---- */
+        .nav {
+            position: fixed;
+            inset: 0 0 auto;
+            z-index: 800;
+            height: var(--nav-h);
+            background: rgba(8,8,8,0.90);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,107,0,0.18);
+        }
+        .nav-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .nav-logo img { height: 44px; width: auto; display: block; }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 34px;
+        }
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 11.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--cream-dim);
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: -3px;
+            width: 0; height: 1px;
+            background: var(--orange);
+            transition: width 0.3s var(--ease);
+        }
+        .nav-links a:hover { color: var(--orange); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--orange); }
+        .nav-links a.active::after { width: 100%; }
+        .nav-cta {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--orange);
+            padding: 10px 22px;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .nav-cta:hover { background: #ff8c00; transform: translateY(-1px); }
+
+        /* Hamburger */
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px;
+        }
+        .burger span {
+            display: block;
+            width: 24px; height: 2px;
+            background: var(--cream);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .burger.open span:nth-child(2) { opacity: 0; }
+        .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .mob-nav {
+            display: none;
+            position: fixed;
+            top: var(--nav-h);
+            inset: auto 0 0;
+            background: var(--black-2);
+            flex-direction: column;
+            padding: 32px var(--gutter) 48px;
+            border-top: 1px solid var(--orange);
+            z-index: 799;
+        }
+        .mob-nav.open { display: flex; }
+        .mob-nav a {
+            font-family: var(--font-display);
+            font-size: 38px;
+            letter-spacing: 0.04em;
+            color: var(--cream);
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            transition: color 0.2s, padding-left 0.2s;
+        }
+        .mob-nav a:hover { color: var(--orange); padding-left: 10px; }
+
+        /* ---- HERO / PAGE HEADER ---- */
+        .page-header {
+            padding-top: calc(var(--nav-h) + 72px);
+            padding-bottom: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header-ghost {
+            position: absolute;
+            top: var(--nav-h);
+            right: -40px;
+            font-family: var(--font-display);
+            font-size: clamp(120px, 20vw, 280px);
+            color: rgba(255,107,0,0.04);
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+        .page-header .tag {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: var(--orange);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .page-header .tag::before {
+            content: '';
+            display: inline-block;
+            width: 28px; height: 1px;
+            background: var(--orange);
+        }
+        .page-h {
+            font-family: var(--font-display);
+            font-size: clamp(58px, 10vw, 130px);
+            line-height: 0.9;
+            letter-spacing: 0.025em;
+            color: var(--cream);
+            margin-bottom: 20px;
+        }
+        .page-h span { color: var(--orange); }
+        .page-sub {
+            font-size: 16px;
+            color: var(--cream-dim);
+            max-width: 500px;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 36px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--orange); }
+        .back-link svg { width: 14px; height: 14px; }
+
+        /* ---- EVENTS GRID ---- */
+        .events-section {
+            padding-bottom: clamp(72px, 9vw, 128px);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        /* Cards */
+        .event-card {
+            background: var(--black-2);
+            border: 1px solid rgba(255,107,0,0.1);
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s;
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.6s var(--ease), transform 0.6s var(--ease),
+                        border-color 0.3s, box-shadow 0.3s;
+        }
+        .event-card.on {
+            opacity: 1;
+            transform: none;
+        }
+        .event-card:hover {
+            border-color: var(--orange);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255,107,0,0.15);
+        }
+        .event-img {
+            aspect-ratio: 16/9;
+            position: relative;
+            overflow: hidden;
+        }
+        .event-img::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,107,0,0.18) 0%, transparent 60%);
+        }
+        .event-badge {
+            position: absolute;
+            top: 14px; left: 14px;
+            background: var(--orange);
+            color: var(--black);
+            font-family: var(--font-display);
+            font-size: 17px;
+            letter-spacing: 0.05em;
+            padding: 3px 12px;
+            z-index: 1;
+        }
+        .event-body { padding: 26px 22px; }
+        .event-cat {
+            font-family: var(--font-mono);
+            font-size: 9.5px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 8px;
+        }
+        .event-t {
+            font-family: var(--font-display);
+            font-size: 27px;
+            letter-spacing: 0.03em;
+            color: var(--cream);
+            line-height: 1.05;
+            margin-bottom: 10px;
+        }
+        .event-d {
+            font-size: 13.5px;
+            color: var(--cream-dim);
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+        .event-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255,107,0,0.1);
+            padding-top: 14px;
+        }
+        .event-time {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--gray);
+            letter-spacing: 0.1em;
+        }
+        .link-arrow {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--orange);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.2s;
+        }
+        .link-arrow:hover { gap: 9px; }
+        .link-arrow svg { width: 13px; height: 13px; }
+
+        /* Empty state */
+        .events-empty {
+            text-align: center;
+            padding: 80px 20px;
+            border: 1px dashed rgba(255,107,0,0.2);
+        }
+        .events-empty p + p { margin-top: 12px; }
+
+        /* ---- FOOTER ---- */
+        .nl-banner {
+            background: var(--orange);
+            padding: 56px 0;
+        }
+        .nl-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 36px;
+            flex-wrap: wrap;
+        }
+        .nl-h {
+            font-family: var(--font-display);
+            font-size: clamp(26px, 4vw, 46px);
+            color: var(--black);
+            letter-spacing: 0.02em;
+            line-height: 1.05;
+        }
+        .nl-form { display: flex; }
+        .nl-input {
+            background: rgba(0,0,0,0.14);
+            border: none;
+            border-bottom: 2px solid rgba(0,0,0,0.35);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 15px;
+            padding: 13px 18px;
+            outline: none;
+            min-width: 260px;
+            transition: border-color 0.2s;
+        }
+        .nl-input::placeholder { color: rgba(0,0,0,0.45); }
+        .nl-input:focus { border-bottom-color: var(--black); }
+        .nl-btn {
+            background: var(--black);
+            color: var(--orange);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 13px 26px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .nl-btn:hover { background: #1a1a1a; }
+
+        footer {
+            background: var(--black);
+            padding: 38px 0;
+            border-top: 1px solid rgba(255,107,0,0.12);
+        }
+        .foot-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+        .foot-logo img { height: 40px; width: auto; display: block; }
+        .foot-links {
+            display: flex; gap: 22px; flex-wrap: wrap;
+        }
+        .foot-links a {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gray);
+            transition: color 0.2s;
+        }
+        .foot-links a:hover { color: var(--orange); }
+        .foot-social { display: flex; gap: 12px; }
+        .foot-social a {
+            width: 38px; height: 38px;
+            border: 1px solid rgba(255,107,0,0.28);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gray);
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+        .foot-social a:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            background: var(--orange-dim);
+        }
+        .foot-copy {
+            width: 100%;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.1em;
+            color: #3a3a3a;
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 1024px) {
+            .events-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            :root { --gutter: 22px; }
+            .nav-links, .nav-cta { display: none; }
+            .burger { display: flex; }
+            .events-grid { grid-template-columns: 1fr; }
+            .nl-inner { flex-direction: column; align-items: flex-start; }
+            .nl-form { width: 100%; }
+            .nl-input { min-width: 0; flex: 1; }
+            .foot-row { flex-direction: column; align-items: flex-start; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav" aria-label="Hauptnavigation">
+    <div class="wrap nav-row">
+        <a href="index.html" class="nav-logo" aria-label="SchraubBar Bückeburg – Startseite">
+            <img src="logo.png" alt="SchraubBar Bückeburg Logo">
+        </a>
+        <ul class="nav-links" role="list">
+            <li><a href="events.html" class="active">Events</a></li>
+            <li><a href="index.html#galerie">Galerie</a></li>
+            <li><a href="index.html#menu">Essen</a></li>
+            <li><a href="index.html#menu">Drinks</a></li>
+            <li><a href="index.html#kontakt">Kontakt</a></li>
+        </ul>
+        <a href="index.html#kontakt" class="nav-cta">Kontakt</a>
+        <button class="burger" id="burger" aria-label="Menü öffnen/schließen" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="mob-nav" id="mobNav">
+    <a href="events.html"      class="mob-lnk">Events</a>
+    <a href="index.html#galerie" class="mob-lnk">Galerie</a>
+    <a href="index.html#menu"    class="mob-lnk">Essen</a>
+    <a href="index.html#menu"    class="mob-lnk">Drinks</a>
+    <a href="index.html#kontakt" class="mob-lnk">Kontakt</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="page-header-ghost" aria-hidden="true">EVENTS</div>
+    <div class="wrap">
+        <a href="index.html" class="back-link">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M13 7H1M7 1L1 7l6 6"/>
+            </svg>
+            Zurück zur Startseite
+        </a>
+        <p class="tag">Alle Veranstaltungen</p>
+        <h1 class="page-h">KOMMENDE<br><span>EVENTS</span></h1>
+        <p class="page-sub">Alle Veranstaltungen der SchraubBar Bückeburg auf einen Blick. Vergangene Events werden automatisch ausgeblendet.</p>
+    </div>
+</div>
+
+<!-- EVENTS GRID -->
+<section class="events-section">
+    <div class="wrap">
+        <div class="events-grid" id="eventsGrid"></div>
+        <div class="events-empty" id="eventsEmpty" style="display:none;">
+            <p style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gray);">Aktuell keine bevorstehenden Events</p>
+            <p style="font-size:15px;color:var(--cream-dim);">Schreib dich für den Newsletter ein und verpasse nichts.</p>
+        </div>
+    </div>
+</section>
+
+<!-- NEWSLETTER BANNER -->
+<div class="nl-banner">
+    <div class="wrap">
+        <div class="nl-inner">
+            <h2 class="nl-h">KEIN EVENT<br>MEHR VERPASSEN</h2>
+            <form class="nl-form" id="nlForm" novalidate>
+                <input type="email" name="email" class="nl-input"
+                       placeholder="deine@email.de" autocomplete="email"
+                       required aria-label="E-Mail für Newsletter">
+                <button type="submit" class="nl-btn">Anmelden →</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="wrap">
+        <div class="foot-row">
+            <a href="index.html" class="foot-logo" aria-label="SchraubBar Bückeburg – Startseite">
+                <img src="logo.png" alt="SchraubBar Bückeburg Logo">
+            </a>
+            <nav class="foot-links" aria-label="Footer Navigation">
+                <a href="index.html#about">Über uns</a>
+                <a href="events.html">Events</a>
+                <a href="index.html#menu">Menü</a>
+                <a href="#">Impressum</a>
+                <a href="#">Datenschutz</a>
+            </nav>
+            <div class="foot-social" aria-label="Social Media Links">
+                <a href="https://instagram.com/schraubbar_bueckeburg"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="SchraubBar auf Instagram">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <p class="foot-copy">
+            © 2025 SchraubBar Bückeburg · Lehnstraße 1, 31675 Bückeburg ·
+            <a href="mailto:moin@schraubbar-bueckeburg.de" style="color:inherit;">moin@schraubbar-bueckeburg.de</a>
+        </p>
+    </div>
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ---- Event data ---- */
+    var EVENTS = [
+        {
+            date: '2026-05-20',
+            title: 'Jam Session',
+            category: 'Live-Musik',
+            time: 'Einlass 18:00 Uhr | Ab 19:00 Uhr',
+            desc: 'Improvisierte Musik auf höchstem Niveau. Alle Musiker sind herzlich eingeladen mitzumachen.',
+            price: 'Freier Eintritt',
+            ticket: null,
+            closed: false,
+            image: 'jam.jpg'
+        },
+        {
+            date: '2026-05-24',
+            title: 'BOHNSON AC/DC Cover Band',
+            category: 'Konzert',
+            time: 'Ab 20:00 Uhr',
+            desc: 'Die härteste AC/DC Cover Band der Region – live in der SchraubBar. Jetzt VVK Tickets sichern!',
+            price: 'VVK 25 €',
+            ticket: 'https://www.eventim-light.com/de/a/664209e0ac2ac16275185af6/e/685a96cab0ce83431a272380',
+            closed: false,
+            image: 'acdc.jpg'
+        },
+        {
+            date: '2026-05-30',
+            title: 'Schraubbar geschlossen',
+            category: 'Hinweis',
+            time: '—',
+            desc: 'An diesem Tag bleibt die SchraubBar geschlossen. Wir sehen uns beim nächsten Event!',
+            price: null,
+            ticket: null,
+            closed: true,
+            image: null
+        },
+        {
+            date: '2026-06-05',
+            title: 'Karaoke Party',
+            category: 'Karaoke',
+            time: '19:00 Uhr',
+            desc: 'Die SchraubBar-Karaoke-Nacht! Zeig der Welt deine Stimme – alle Genres, alle Levels willkommen.',
+            price: 'Freier Eintritt',
+            ticket: null,
+            closed: false,
+            image: 'karaoke.jpg'
+        },
+        {
+            date: '2026-06-13',
+            title: 'Happy Night Revival Party',
+            category: 'Special Event',
+            time: 'Ab 21:00 Uhr',
+            desc: 'Die legendäre Revival Party kehrt zurück – eine Nacht voller Hits, guter Laune und großer Energie.',
+            price: 'VVK 10 €',
+            ticket: null,
+            closed: false,
+            image: 'happy.jpg'
+        },
+        {
+            date: '2026-06-17',
+            title: 'Jam Session',
+            category: 'Live-Musik',
+            time: 'Ab 19:30 Uhr',
+            desc: 'Weitere Jam Session für alle Musikbegeisterten. Komm vorbei und lass die Musik sprechen.',
+            price: 'Freier Eintritt',
+            ticket: null,
+            closed: false,
+            image: 'jam.jpg'
+        },
+        {
+            date: '2026-06-26',
+            title: 'Lagerfeuer Musik mit Jan Kopton',
+            category: 'Live-Musik',
+            time: 'Ab 20:00 Uhr',
+            desc: 'Atmosphärische Lagerfeuermusik mit Gitarrist Jan Kopton – unter freiem Himmel, Hutkonzert-Format.',
+            price: 'Hutkonzert',
+            ticket: null,
+            closed: false,
+            image: 'IMG_1998.jpg'
+        }
+    ];
+
+    var BG = [
+        'linear-gradient(135deg,#1f0d00,#080500)',
+        'linear-gradient(135deg,#150900,#0a0800)',
+        'linear-gradient(135deg,#1a0a00,#060400)',
+        'linear-gradient(135deg,#1c0800,#090400)',
+        'linear-gradient(135deg,#180b00,#060300)',
+        'linear-gradient(135deg,#160900,#050200)',
+        'linear-gradient(135deg,#1e0c00,#0a0500)'
+    ];
+    var DE_MONTHS = ['JAN','FEB','MRZ','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ'];
+
+    function fmtDate(iso) {
+        var d = new Date(iso + 'T00:00:00');
+        return d.getDate() + '. ' + DE_MONTHS[d.getMonth()];
+    }
+    function isExpired(iso) {
+        var today = new Date(); today.setHours(0,0,0,0);
+        var evDay = new Date(iso + 'T00:00:00');
+        evDay.setDate(evDay.getDate() + 1);
+        return today >= evDay;
+    }
+    function arrowSvg() {
+        return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 7h12M7 1l6 6-6 6"/></svg>';
+    }
+
+    function buildCard(ev, idx) {
+        var dl = fmtDate(ev.date);
+        var bgStyle = ev.image
+            ? 'background:' + BG[idx % BG.length] + ';background-image:url(' + ev.image + ');background-size:cover;background-position:center;'
+            : 'background:' + BG[idx % BG.length] + ';';
+        var closedOverlay = ev.closed
+            ? '<div style="position:absolute;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;">'
+              + '<span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gray);">Geschlossen</span></div>'
+            : '';
+        var footRight = '';
+        if (ev.ticket) {
+            footRight = '<a href="' + ev.ticket + '" target="_blank" rel="noopener noreferrer" class="link-arrow">Tickets ' + arrowSvg() + '</a>';
+        } else if (ev.price && !ev.closed) {
+            footRight = '<span style="font-family:var(--font-mono);font-size:10.5px;color:var(--orange);">' + ev.price + '</span>';
+        }
+        return '<article class="event-card">'
+            + '<div class="event-img" style="' + bgStyle + '" role="img" aria-label="' + ev.title + '">'
+            + '<span class="event-badge">' + dl + '</span>'
+            + closedOverlay
+            + '</div>'
+            + '<div class="event-body">'
+            + '<p class="event-cat">' + ev.category + '</p>'
+            + '<h2 class="event-t">' + ev.title.toUpperCase() + '</h2>'
+            + '<p class="event-d">' + ev.desc + '</p>'
+            + '<div class="event-foot">'
+            + '<span class="event-time">' + ev.time + '</span>'
+            + footRight
+            + '</div></div></article>';
+    }
+
+    /* ---- Render ---- */
+    var upcoming = EVENTS.filter(function(ev) { return !isExpired(ev.date); });
+    var grid  = document.getElementById('eventsGrid');
+    var empty = document.getElementById('eventsEmpty');
+
+    if (!upcoming.length) {
+        empty.style.display = 'block';
+    } else {
+        grid.innerHTML = upcoming.map(function(ev, i) { return buildCard(ev, i); }).join('');
+
+        /* Staggered fade-in */
+        var cards = grid.querySelectorAll('.event-card');
+        if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('on');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08 });
+            cards.forEach(function(c, i) {
+                c.style.transitionDelay = (i % 3 * 0.1) + 's';
+                io.observe(c);
+            });
+        } else {
+            cards.forEach(function(c) { c.classList.add('on'); });
+        }
+    }
+
+    /* ---- Nav scroll ---- */
+    var nav = document.getElementById('nav');
+    window.addEventListener('scroll', function() {
+        nav.style.borderBottomColor = window.scrollY > 50
+            ? 'rgba(255,107,0,0.45)'
+            : 'rgba(255,107,0,0.18)';
+    }, { passive: true });
+
+    /* ---- Mobile nav ---- */
+    var burger = document.getElementById('burger');
+    var mobNav = document.getElementById('mobNav');
+    burger.addEventListener('click', function() {
+        var open = mobNav.classList.toggle('open');
+        burger.classList.toggle('open', open);
+        burger.setAttribute('aria-expanded', open);
+    });
+    document.querySelectorAll('.mob-lnk').forEach(function(l) {
+        l.addEventListener('click', function() {
+            mobNav.classList.remove('open');
+            burger.classList.remove('open');
+            burger.setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    /* ---- Newsletter form ---- */
+    var nlForm = document.getElementById('nlForm');
+    if (nlForm) {
+        nlForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var inp = nlForm.querySelector('input');
+            var btn = nlForm.querySelector('button');
+            if (inp && inp.value) {
+                btn.textContent = 'Angemeldet ✓';
+                btn.style.background = '#22c55e';
+                btn.style.color = '#fff';
+                inp.value = '';
+                setTimeout(function() {
+                    btn.textContent = 'Anmelden →';
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 3000);
+            }
+        });
+    }
+
+}());
+</script>
+</body>
+</html>
