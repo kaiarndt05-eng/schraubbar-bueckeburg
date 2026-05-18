@@ -25,6 +25,9 @@
     <!-- Canonical -->
     <link rel="canonical" href="https://schraubbar-bueckeburg.de/">
     <link rel="icon" type="image/png" href="logo.png">
+    <!-- Leaflet (custom map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN2GqGg=" crossorigin=""></script>
 
     <!-- Structured Data: LocalBusiness -->
     <script type="application/ld+json">
@@ -1196,12 +1199,61 @@
             border: 1px solid rgba(255,107,0,0.3);
             overflow: hidden;
         }
-        .map-wrap iframe {
+        #contactMap {
             width: 100%;
             height: 100%;
-            display: block;
-            border: 0;
-            filter: grayscale(25%) contrast(1.05);
+            min-height: 360px;
+        }
+        /* Leaflet controls */
+        .leaflet-control-zoom a {
+            background: var(--black-2) !important;
+            color: var(--cream) !important;
+            border-color: rgba(255,107,0,0.3) !important;
+        }
+        .leaflet-control-zoom a:hover {
+            background: var(--black-3) !important;
+            color: var(--orange) !important;
+        }
+        .leaflet-control-attribution {
+            background: rgba(8,8,8,0.75) !important;
+            color: var(--gray) !important;
+            font-size: 10px !important;
+        }
+        .leaflet-control-attribution a { color: var(--gray) !important; }
+        /* Custom popup */
+        .leaflet-popup-content-wrapper {
+            background: var(--black-2) !important;
+            border: 1px solid var(--orange) !important;
+            border-radius: 0 !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
+            color: var(--cream) !important;
+            font-family: var(--font-body) !important;
+        }
+        .leaflet-popup-tip { background: var(--black-2) !important; }
+        .leaflet-popup-content { margin: 16px 20px !important; }
+        .leaflet-popup-close-button { color: var(--gray) !important; top: 8px !important; right: 10px !important; }
+        .leaflet-popup-close-button:hover { color: var(--orange) !important; }
+        .map-popup-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            letter-spacing: 0.05em;
+            color: var(--cream);
+            margin-bottom: 6px;
+        }
+        .map-popup-addr {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .map-popup-link {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--orange) !important;
         }
         .map-open-btn {
             position: absolute;
@@ -1215,7 +1267,8 @@
             text-transform: uppercase;
             padding: 10px 18px;
             transition: background 0.2s;
-            z-index: 10;
+            z-index: 1000;
+            display: block;
         }
         .map-open-btn:hover { background: #ff8c00; }
         .map-lbl {
@@ -2011,20 +2064,14 @@
                 </div>
             </div>
 
-            <!-- Right: echte Karte -->
+            <!-- Right: Leaflet custom map -->
             <div class="fade d2">
                 <div class="map-wrap">
-                    <iframe
-                        src="https://maps.google.com/maps?q=Lehnstra%C3%9Fe+1%2C+31675+B%C3%BCckeburg&output=embed&hl=de&z=17"
-                        loading="lazy"
-                        allowfullscreen
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="SchraubBar Bückeburg auf Google Maps">
-                    </iframe>
+                    <div id="contactMap"></div>
                     <a href="https://maps.google.com/?q=Lehnstra%C3%9Fe+1,+31675+B%C3%BCckeburg"
                        target="_blank" rel="noopener noreferrer"
                        class="map-open-btn">
-                        In Maps öffnen →
+                        Route planen →
                     </a>
                 </div>
             </div>
@@ -2418,6 +2465,50 @@
     } else {
         fadeEls.forEach(function (el) { el.classList.add('on'); });
     }
+
+    /* ------ Leaflet Map ------ */
+    (function initMap() {
+        var el = document.getElementById('contactMap');
+        if (!el) return;
+
+        var lat = 52.27867, lng = 9.04812;
+
+        var map = L.map('contactMap', {
+            center: [lat, lng],
+            zoom: 17,
+            scrollWheelZoom: false,
+            zoomControl: true
+        });
+
+        /* Dark tiles: CartoDB Dark Matter */
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        /* Custom orange SVG pin */
+        var pin = L.divIcon({
+            className: '',
+            iconSize:   [36, 50],
+            iconAnchor: [18, 50],
+            popupAnchor:[0, -52],
+            html: '<svg width="36" height="50" viewBox="0 0 36 50" fill="none" xmlns="http://www.w3.org/2000/svg">'
+                + '<path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 32 18 32S36 31.5 36 18C36 8.06 27.94 0 18 0z" fill="#FF6B00"/>'
+                + '<circle cx="18" cy="18" r="7" fill="#080808"/>'
+                + '</svg>'
+        });
+
+        /* Popup content */
+        var popup = '<div class="map-popup-title">SCHRAUBBAR</div>'
+            + '<div class="map-popup-addr">Lehnstraße 1<br>31675 Bückeburg</div>'
+            + '<a href="tel:+4915154981779" class="map-popup-link">01515 – 49 81 779</a>';
+
+        L.marker([lat, lng], { icon: pin })
+            .addTo(map)
+            .bindPopup(popup)
+            .openPopup();
+    })();
 
     /* ------ Smooth anchor scroll (offset for sticky nav) ------ */
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
