@@ -1617,8 +1617,8 @@
 ================================================================ -->
 <section class="video-sec" id="video">
     <div class="yt-wrap fade">
-        <iframe
-            src="https://player.vimeo.com/video/1198046119?badge=0&autopause=0&autoplay=1&loop=1&muted=1&controls=0&title=0&byline=0&portrait=0&player_id=0&app_id=58479"
+        <iframe id="vimeoPlayer"
+            src="https://player.vimeo.com/video/1198046119?badge=0&autopause=0&title=0&byline=0&portrait=0&controls=0"
             title="SchraubBar Bückeburg – Video"
             allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
             allowfullscreen
@@ -2682,6 +2682,23 @@
 
 }());
 </script>
+<!-- Vimeo Player SDK -->
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+(function () {
+    var iframe = document.getElementById('vimeoPlayer');
+    if (!iframe) return;
+    function initVimeo() {
+        if (typeof Vimeo === 'undefined') { setTimeout(initVimeo, 100); return; }
+        var player = new Vimeo.Player(iframe);
+        player.setVolume(0);
+        player.setLoop(true);
+        player.play().catch(function () {});
+    }
+    initVimeo();
+}());
+</script>
+
 <!-- Leaflet JS + Map Init (außerhalb des Haupt-IIFE, nach DOM-Aufbau) -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
