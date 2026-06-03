@@ -2691,9 +2691,11 @@
     function initVimeo() {
         if (typeof Vimeo === 'undefined') { setTimeout(initVimeo, 100); return; }
         var player = new Vimeo.Player(iframe);
-        player.setVolume(0);
-        player.setLoop(true);
-        player.play().catch(function () {});
+        player.ready().then(function () {
+            player.setVolume(0);
+            player.setLoop(true);
+            player.play();
+        });
     }
     initVimeo();
 }());
