@@ -468,54 +468,26 @@
            VIDEO SECTION
         ============================================================ */
         .video-sec {
-            padding: var(--pad) 0;
             background: var(--black-2);
+            padding-top: var(--pad);
         }
         .video-sec-header {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
             margin-bottom: 40px;
-            flex-wrap: wrap;
-            gap: 16px;
         }
-        .video-player {
+        .yt-wrap {
             position: relative;
             width: 100%;
             aspect-ratio: 16/9;
             overflow: hidden;
-            background: var(--black-3);
-            border: 1px solid rgba(255,107,0,0.12);
+            background: #000;
         }
-        .video-player video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .video-player-ph {
+        .yt-wrap iframe {
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at center, #1e0d00 0%, #080808 70%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-        }
-        .video-player-ph .play-ring {
-            width: 72px; height: 72px;
-            border: 2px solid var(--orange);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--orange);
-        }
-        .video-player-ph span {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--gray);
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
         }
 
         /* ============================================================
@@ -1519,26 +1491,20 @@
 <section class="video-sec" id="video">
     <div class="wrap">
         <div class="video-sec-header">
-            <div>
-                <p class="tag fade" style="margin-bottom:14px;">Erlebe die SchraubBar</p>
-                <h2 class="sec-h fade d1">UNSER<br>VIDEO</h2>
-            </div>
+            <p class="tag fade" style="margin-bottom:14px;">Erlebe die SchraubBar</p>
+            <h2 class="sec-h fade d1">UNSER<br>VIDEO</h2>
         </div>
+    </div>
 
-        <div class="video-player fade d2">
-            <!-- Video einbinden: <source src="video/schraubbar.mp4" type="video/mp4"> -->
-            <video id="sectionVideo" autoplay muted loop playsinline controls>
-            </video>
-            <!-- Platzhalter solange kein Video hinterlegt -->
-            <div class="video-player-ph" id="videoPh">
-                <div class="play-ring" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <polygon points="5,3 19,12 5,21"/>
-                    </svg>
-                </div>
-                <span>Video wird bald verfügbar</span>
-            </div>
-        </div>
+    <!-- Vollbreite YouTube-Embed -->
+    <div class="yt-wrap fade d2">
+        <iframe
+            src="https://www.youtube.com/embed/cMV40TmlXsI?rel=0&modestbranding=1&color=white"
+            title="SchraubBar Bückeburg – Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            loading="lazy">
+        </iframe>
     </div>
 </section>
 
@@ -2144,19 +2110,6 @@
     }
     window.scrollTo(0, 0);
 
-    /* ------ Video section fallback ------ */
-    var sVid = document.getElementById('sectionVideo');
-    var vPh  = document.getElementById('videoPh');
-    if (sVid && !sVid.querySelector('source')) {
-        sVid.style.display = 'none';
-        if (vPh) vPh.style.display = 'flex';
-    } else if (sVid) {
-        if (vPh) vPh.style.display = 'none';
-        sVid.addEventListener('error', function () {
-            sVid.style.display = 'none';
-            if (vPh) vPh.style.display = 'flex';
-        });
-    }
 
     /* ------ Nav scroll state ------ */
     var nav = document.getElementById('nav');
