@@ -224,47 +224,82 @@
         }
         .nav-cta:hover { background: #ff8c00; transform: translateY(-1px); }
 
-        /* Hamburger */
-        .burger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            padding: 8px;
-        }
-        .burger span {
-            display: block;
-            width: 24px; height: 2px;
-            background: var(--cream);
-            transition: transform 0.3s, opacity 0.3s;
-        }
-        .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .burger.open span:nth-child(2) { opacity: 0; }
-        .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        /* Mobile drawer */
-        .mob-nav {
+        /* Circular hamburger menu */
+        .ham-wrap {
             display: none;
             position: fixed;
-            top: var(--nav-h);
-            inset: auto 0 0;
-            background: var(--black-2);
+            top: 7px;
+            right: 16px;
+            z-index: 900;
+        }
+        @media (max-width: 768px) { .ham-wrap { display: block; } }
+
+        .ham-toggle {
+            position: relative;
+            z-index: 2;
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--orange);
+            border: none;
+            cursor: pointer;
+            display: flex;
             flex-direction: column;
-            padding: 32px var(--gutter) 48px;
-            border-top: 1px solid var(--orange);
-            z-index: 799;
-            gap: 0;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
-        .mob-nav.open { display: flex; }
-        .mob-nav a {
-            font-family: var(--font-display);
-            font-size: 38px;
-            letter-spacing: 0.04em;
+        .ham-toggle span {
+            display: block;
+            width: 20px; height: 2px;
+            background: var(--cream);
+            border-radius: 1px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .ham-wrap.open .ham-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .ham-wrap.open .ham-toggle span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .ham-wrap.open .ham-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .ham-items {
+            position: absolute;
+            top: 0; left: 0;
+            width: 56px;
+        }
+        .ham-item {
+            position: absolute;
+            top: 0; left: 0;
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--black-2);
+            border: 1px solid rgba(255,107,0,0.55);
             color: var(--cream);
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            transition: color 0.2s, padding-left 0.2s;
+            font-family: var(--font-mono);
+            font-size: 8px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 1.3;
+            padding: 0 6px;
+            opacity: 0;
+            transform: translateY(0) scale(0.7);
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.25s;
         }
-        .mob-nav a:hover { color: var(--orange); padding-left: 10px; }
+        .ham-item:nth-child(1) { transition-delay: 0ms; }
+        .ham-item:nth-child(2) { transition-delay: 40ms; }
+        .ham-item:nth-child(3) { transition-delay: 80ms; }
+        .ham-item:nth-child(4) { transition-delay: 120ms; }
+        .ham-item:nth-child(5) { transition-delay: 160ms; }
+        .ham-item:nth-child(6) { transition-delay: 200ms; }
+        .ham-wrap.open .ham-item {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(calc((var(--idx) + 1) * 64px)) scale(1);
+        }
+        .ham-item:hover { background: rgba(255,107,0,0.12); color: var(--orange); }
 
         /* ============================================================
            HERO
@@ -432,6 +467,10 @@
             from { opacity: 0; transform: translateX(-40px); }
             to   { opacity: 1; transform: translateX(0); }
         }
+        @keyframes busInRight {
+            from { opacity: 0; transform: scaleX(-1) translateX(-40px); }
+            to   { opacity: 1; transform: scaleX(-1) translateX(0); }
+        }
         @keyframes pulse {
             0%, 100% { opacity: 0.3; }
             50%       { opacity: 1; }
@@ -440,28 +479,40 @@
         /* Hero responsive */
         @media (max-width: 900px) {
             .hero {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr;
+                grid-template-columns: 54% 46%;
+                grid-template-rows: 1fr;
                 align-items: start;
-                padding-top: calc(var(--nav-h) + 32px);
-                height: auto;
-                min-height: 100dvh;
+                padding-top: calc(var(--nav-h) + 28px);
+                height: 86dvh;
+                min-height: 560px;
+                overflow: hidden;
             }
             .hero-bus {
-                height: 44vw;
-                min-height: 200px;
-                align-items: flex-end;
+                height: calc(100dvh - var(--nav-h));
+                min-height: unset;
+                align-items: flex-start;
                 order: 1;
+                overflow: hidden;
             }
+            .hero-bus::after { display: none; }
             .hero-bus img {
-                width: 100%;
-                max-height: 44vw;
+                width: auto;
+                height: 88%;
+                max-height: none;
+                max-width: none;
+                margin-left: -330px;
+                margin-top: -80px;
+                transform-origin: center top;
+                animation: busIn 1.1s var(--ease) 0.15s forwards;
             }
             .hero-content {
                 order: 2;
-                padding: 24px var(--gutter) 80px;
+                padding: 20px clamp(12px, 3vw, 18px) 40px 6px;
             }
-            .scroll-hint { right: 50%; transform: translateX(50%); }
+            .hero-title { font-size: clamp(24px, 6.2vw, 40px); }
+            .hero-sub   { font-size: 12px; margin-bottom: 20px; }
+            .hero-btns  { gap: 10px; }
+            .scroll-hint { display: none; }
         }
 
         /* ============================================================
@@ -1241,6 +1292,68 @@
             flex-shrink: 0;
         }
 
+        /* Extras chips */
+        .m-extras {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,107,0,0.12);
+        }
+        .m-extra-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,107,0,0.55);
+            margin-right: 4px;
+            flex-shrink: 0;
+        }
+        .m-extra-chip {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(245,240,232,0.45);
+            background: rgba(255,107,0,0.05);
+            border: 1px solid rgba(255,107,0,0.14);
+            padding: 5px 9px;
+            white-space: nowrap;
+        }
+
+        /* Panel collapse */
+        .m-panel-body {
+            max-height: 620px;
+            overflow: hidden;
+            transition: max-height 0.7s ease;
+        }
+        .m-panel-fade {
+            height: 130px;
+            background: linear-gradient(to bottom, transparent, var(--black));
+            margin-top: -130px;
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.4s;
+        }
+        .m-show-more {
+            display: block;
+            margin: 18px auto 0;
+            cursor: pointer;
+            background: none;
+            font-family: var(--font-mono);
+            font-size: 12.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--cream);
+            border: 1px solid rgba(245,240,232,0.28);
+            padding: 15px 34px;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .m-show-more:hover { border-color: var(--orange); color: var(--orange); }
+
         /* ============================================================
            CONTACT / FOOTER
         ============================================================ */
@@ -1494,7 +1607,6 @@
         @media (max-width: 768px) {
             :root { --pad: 64px; --gutter: 22px; }
             .nav-links, .nav-cta { display: none; }
-            .burger { display: flex; }
             .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 38px; }
             .info-grid { grid-template-columns: 1fr 1fr; }
             .features-row { grid-column: span 2; }
@@ -1536,27 +1648,31 @@
 
         <ul class="nav-links" role="list">
             <li><a href="#events">Events</a></li>
-            <li><a href="#galerie">Galerie</a></li>
             <li><a href="#menu">Essen</a></li>
             <li><a href="#menu">Drinks</a></li>
+            <li><a href="#galerie">Galerie</a></li>
+            <li><a href="#bewertungen">Bewertungen</a></li>
             <li><a href="#kontakt">Kontakt</a></li>
         </ul>
 
         <a href="#events" class="nav-cta">Events</a>
 
-        <button class="burger" id="burger" aria-label="Menü öffnen/schließen" aria-expanded="false">
-            <span></span><span></span><span></span>
-        </button>
     </div>
 </nav>
 
-<!-- Mobile drawer -->
-<div class="mob-nav" id="mobNav" aria-label="Mobile Navigation">
-    <a href="#events"  class="mob-lnk">Events</a>
-    <a href="#galerie" class="mob-lnk">Galerie</a>
-    <a href="#menu"    class="mob-lnk">Essen</a>
-    <a href="#menu"    class="mob-lnk">Drinks</a>
-    <a href="#kontakt" class="mob-lnk">Kontakt</a>
+<!-- Mobile circular hamburger -->
+<div class="ham-wrap" id="hamWrap" aria-label="Mobile Navigation">
+    <div class="ham-items">
+        <a href="#events"      class="ham-item" style="--idx:0">Events</a>
+        <a href="#menu"        class="ham-item" style="--idx:1">Essen</a>
+        <a href="#menu"        class="ham-item" style="--idx:2">Drinks</a>
+        <a href="#galerie"     class="ham-item" style="--idx:3">Galerie</a>
+        <a href="#bewertungen" class="ham-item" style="--idx:4">Bewer&shy;tungen</a>
+        <a href="#kontakt"     class="ham-item" style="--idx:5">Kontakt</a>
+    </div>
+    <button class="ham-toggle" id="hamToggle" aria-label="Menü öffnen/schließen" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
 </div>
 
 
@@ -1588,7 +1704,7 @@
     </div>
 
     <div class="scroll-hint" aria-hidden="true">
-        <span>Scroll</span>
+        <span>Abfahrt</span>
         <div class="scroll-line"></div>
     </div>
 </section>
@@ -1819,136 +1935,469 @@
 
         <!-- ---- FOOD PANEL ---- -->
         <div class="m-panel on" id="panel-food" role="tabpanel" aria-labelledby="tab-food">
+        <div class="m-panel-body">
 
             <div class="m-sec">
-                <h3 class="m-sec-title">BURGER</h3>
-                <p class="m-sec-sub">Alle Burger werden mit Pommes oder Salat serviert</p>
+                <h3 class="m-sec-title">KLASSIKER</h3>
                 <div class="m-items">
                     <div class="m-item">
-                        <div><p class="m-item-name">SCHRAUBBAR CLASSIC</p><p class="m-item-desc">180g Rinderhackfleisch, Cheddar, karamellisierte Zwiebeln, hausgemachte BBQ-Sauce</p></div>
-                        <span class="m-item-price">12,90 €</span>
-                    </div>
-                    <div class="m-item">
-                        <div><p class="m-item-name">DOUBLE TROUBLE</p><p class="m-item-desc">2 × 130g Patties, doppelter Cheddar, Speck, Jalapeños, Chipotle-Mayo</p></div>
-                        <span class="m-item-price">16,90 €</span>
-                    </div>
-                    <div class="m-item">
-                        <div><p class="m-item-name">MUSHROOM MELT</p><p class="m-item-desc">180g Patty, Pilz-Ragout, Gruyère, Rucola, Trüffelöl-Mayo</p></div>
-                        <span class="m-item-price">14,50 €</span>
-                    </div>
-                    <div class="m-item">
-                        <div><p class="m-item-name">VEGGIE LEGEND</p><p class="m-item-desc">Hausgemachter Bohnen-Patty, Avocado, gegrillte Paprika, Tomaten, Sriracha</p></div>
-                        <span class="m-item-price">13,50 €</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="m-sec">
-                <h3 class="m-sec-title">SNACKS &amp; SIDES</h3>
-                <p class="m-sec-sub">Perfekt zum Teilen oder als kleiner Hunger</p>
-                <div class="m-items">
-                    <div class="m-item">
-                        <div><p class="m-item-name">LOADED FRIES</p><p class="m-item-desc">Knusprige Pommes, Cheddar-Sauce, Speck-Bits, saure Sahne, Frühlingszwiebeln</p></div>
+                        <div><p class="m-item-name">VW-CURRYWURST</p><p class="m-item-desc">Eine frittierte 170g VW-Currywurst in fruchtiger, leicht pikanter Currysoße mit Curry Pulver</p></div>
                         <span class="m-item-price">8,90 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">CHICKEN WINGS</p><p class="m-item-desc">6 Stück – BBQ, Buffalo oder Honig-Senf, mit Dip</p></div>
+                        <div><p class="m-item-name">VEGGI CURRYWURST</p><p class="m-item-desc">Vegetarische Currywurst in fruchtiger Currysoße mit Curry Pulver</p></div>
                         <span class="m-item-price">9,90 €</span>
                     </div>
-                    <div class="m-item">
-                        <div><p class="m-item-name">ONION RINGS</p><p class="m-item-desc">Knusprig panierte Zwiebelringe mit hausgemachtem Ranch-Dip</p></div>
-                        <span class="m-item-price">6,50 €</span>
-                    </div>
-                    <div class="m-item">
-                        <div><p class="m-item-name">NACHOS DELUXE</p><p class="m-item-desc">Tortilla-Chips, Guacamole, Pico de Gallo, Cheddar, Jalapeños, saure Sahne</p></div>
-                        <span class="m-item-price">8,50 €</span>
-                    </div>
+                </div>
+                <div class="m-extras">
+                    <span class="m-extra-label">Extras</span>
+                    <span class="m-extra-chip">Wedges +5,00 €</span>
+                    <span class="m-extra-chip">Pommes +4,00 €</span>
+                    <span class="m-extra-chip">6 Onion Rings +5,50 €</span>
+                    <span class="m-extra-chip">8 Chili Cheese Nuggets +5,50 €</span>
+                    <span class="m-extra-chip">Ketchup/Mayo +0,60 €</span>
+                    <span class="m-extra-chip">Sour Cream +1,50 €</span>
+                    <span class="m-extra-chip">Barbecue +1,00 €</span>
+                    <span class="m-extra-chip">Jalapeños +1,00 €</span>
                 </div>
             </div>
 
             <div class="m-sec">
-                <h3 class="m-sec-title">DESSERTS</h3>
-                <p class="m-sec-sub">Der süße Abschluss</p>
+                <h3 class="m-sec-title">BURGER</h3>
                 <div class="m-items">
                     <div class="m-item">
-                        <div><p class="m-item-name">BROWNIE BOMB</p><p class="m-item-desc">Warmer Schokoladenbrownie mit Vanilleeis und Karamellsauce</p></div>
+                        <div><p class="m-item-name">HOME BURGER</p><p class="m-item-desc">200g frisches Rindfleisch vom Grill, Tomate, karamellisierte rote Zwiebel, Lollo Rosso, Ketchup/Mayo in einem Brioche-Bun</p></div>
+                        <span class="m-item-price">12,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">VEGETARISCHER BURGER</p><p class="m-item-desc">2x Vegane Patties, Tomate, karamellisierte rote Zwiebel, Lollo Rosso, Ketchup/Mayo in einem Brioche-Bun</p></div>
+                        <span class="m-item-price">13,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BARBECUE ONION-RING BURGER</p><p class="m-item-desc">200g Rindfleisch vom Grill, Lollo Rosso, 2x Cheddar, 2–3 knusprige Onion Rings, Mississippi BBQ Soße in einem Brioche-Bun</p></div>
+                        <span class="m-item-price">14,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">CRISPY CHICKEN BURGER</p><p class="m-item-desc">135g Crispy Chicken Patty, Lollo Rosso, Tomate, karamellisierte rote Zwiebeln, Sweet Chili/Mayo in einem Brioche-Bun</p></div>
+                        <span class="m-item-price">10,90 €</span>
+                    </div>
+                </div>
+                <div class="m-extras">
+                    <span class="m-extra-label">Extras</span>
+                    <span class="m-extra-chip">Wedges +5,00 €</span>
+                    <span class="m-extra-chip">Pommes +4,00 €</span>
+                    <span class="m-extra-chip">6 Onion Rings +5,50 €</span>
+                    <span class="m-extra-chip">8 Chili Cheese Nuggets +5,50 €</span>
+                    <span class="m-extra-chip">Ketchup/Mayo +0,60 €</span>
+                    <span class="m-extra-chip">Sour Cream +1,50 €</span>
+                    <span class="m-extra-chip">Barbecue +1,00 €</span>
+                    <span class="m-extra-chip">Jalapeños +1,00 €</span>
+                    <span class="m-extra-chip">Cheddar Scheibe +0,80 €</span>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">FINGER FOOD</h3>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">HOT DOG</p><p class="m-item-desc">Frikandelwurst im Brioche Bun mit cremiger Hotdog-Soße, Ketchup, Röstzwiebeln und sauren Gurken</p></div>
                         <span class="m-item-price">6,90 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">CHEESECAKE NEW YORK</p><p class="m-item-desc">Cremiger Cheesecake mit Erdbeersauce und frischen Beeren</p></div>
-                        <span class="m-item-price">5,90 €</span>
+                        <div><p class="m-item-name">CHILI DOG</p><p class="m-item-desc">Frikandelwurst im Brioche-Brötchen mit Chili Cheese Soße, Röstzwiebeln und Jalapeños</p></div>
+                        <span class="m-item-price">7,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">CHICKEN WINGS</p><p class="m-item-desc">8 Stück oder 16 Stück</p></div>
+                        <span class="m-item-price">7,90 / 14,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">MIX PLATTE – AMERICAN STYLE</p><p class="m-item-desc">4x Chicken Wings, 6x Onion Rings, 6x Chili Cheese Nuggets, Wedges + 1x Sour Cream Dip &amp; 1x Mississippi BBQ</p></div>
+                        <span class="m-item-price">16,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">MINI SCHRAUBER (für die Kids)</p><p class="m-item-desc">6 Chicken Nuggets mit Pommes, Ketchup, Mayo</p></div>
+                        <span class="m-item-price">8,90 €</span>
+                    </div>
+                </div>
+                <div class="m-extras">
+                    <span class="m-extra-label">Extras</span>
+                    <span class="m-extra-chip">Wedges +5,00 €</span>
+                    <span class="m-extra-chip">Pommes +4,00 €</span>
+                    <span class="m-extra-chip">6 Onion Rings +5,50 €</span>
+                    <span class="m-extra-chip">8 Chili Cheese Nuggets +5,50 €</span>
+                    <span class="m-extra-chip">Ketchup/Mayo +0,60 €</span>
+                    <span class="m-extra-chip">Sour Cream +1,50 €</span>
+                    <span class="m-extra-chip">Barbecue +1,00 €</span>
+                    <span class="m-extra-chip">Jalapeños +1,00 €</span>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">FÜR ZWISCHENDURCH</h3>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">FOLIENKARTOFFEL</p><p class="m-item-desc">Ca. 200g Kartoffel in Alufolie mit Sour Cream</p></div>
+                        <span class="m-item-price">7,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">CHILI CHEESE POMMES</p><p class="m-item-desc">Pommes mit warmer Chili Cheese Soße und Jalapeños</p></div>
+                        <span class="m-item-price">7,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">SUPER CRUNCH FRIES</p></div>
+                        <span class="m-item-price">4,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">WEDGES</p></div>
+                        <span class="m-item-price">5,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">8 ONION RINGS</p></div>
+                        <span class="m-item-price">6,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">8 CHILI CHEESE NUGGETS</p></div>
+                        <span class="m-item-price">6,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">NACHOS</p></div>
+                        <span class="m-item-price">5,00 €</span>
+                    </div>
+                </div>
+                <div class="m-extras">
+                    <span class="m-extra-label">Extras</span>
+                    <span class="m-extra-chip">Gouda überbacken +2,00 €</span>
+                    <span class="m-extra-chip">Sweet Chili +1,00 €</span>
+                    <span class="m-extra-chip">Sour Cream +1,50 €</span>
+                    <span class="m-extra-chip">Barbecue +1,00 €</span>
+                    <span class="m-extra-chip">Chili Cheese +1,50 €</span>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">SPECIALS</h3>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">DONNERSTAG</p><p class="m-item-desc">Currywurst + Pommes – auch Veggie</p></div>
+                        <span class="m-item-price">8,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">SONNTAG – KAFFEE &amp; KUCHEN</p></div>
+                        <span class="m-item-price">6,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">SONNTAG – MITTAGS BIS 16 UHR</p><p class="m-item-desc">Currywurst + Pommes 8,90 € &nbsp;·&nbsp; Crispy Chicken Burger + Pommes 9,90 € &nbsp;·&nbsp; Folienkartoffel Sour Cream 5,90 €</p></div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- end m-panel-body food -->
+        <div class="m-panel-fade"></div>
+        <button class="m-show-more" aria-expanded="false">Gesamte Karte ansehen ↓</button>
+        </div><!-- end panel-food -->
 
         <!-- ---- DRINKS PANEL ---- -->
         <div class="m-panel" id="panel-drinks" role="tabpanel" aria-labelledby="tab-drinks">
+        <div class="m-panel-body">
 
             <div class="m-sec">
-                <h3 class="m-sec-title">BIERE</h3>
-                <p class="m-sec-sub">Vom Fass und aus der Flasche</p>
+                <h3 class="m-sec-title">BIERE VOM FASS</h3>
+                <p class="m-sec-sub">0,3 l / 0,5 l</p>
                 <div class="m-items">
                     <div class="m-item">
-                        <div><p class="m-item-name">PILS VOM FASS</p><p class="m-item-desc">Frisch gezapft, 0,3 l / 0,5 l</p></div>
-                        <span class="m-item-price">3,20 / 4,50 €</span>
+                        <div><p class="m-item-name">BITBURGER</p></div>
+                        <span class="m-item-price">3,50 / 5,00 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">WEIZEN</p><p class="m-item-desc">Bayerisches Weißbier, 0,5 l</p></div>
-                        <span class="m-item-price">4,20 €</span>
+                        <div><p class="m-item-name">ALSTERL</p></div>
+                        <span class="m-item-price">3,50 / 5,00 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">CRAFT IPA</p><p class="m-item-desc">Lokales Craft Beer, hopfig und frisch, 0,33 l</p></div>
-                        <span class="m-item-price">4,80 €</span>
+                        <div><p class="m-item-name">BENEDIKTINER WEISSBIER</p></div>
+                        <span class="m-item-price">3,50 / 5,00 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">RADLER</p><p class="m-item-desc">Bier mit Zitronenlimonade, 0,5 l</p></div>
-                        <span class="m-item-price">3,80 €</span>
+                        <div><p class="m-item-name">BENEDIKTINER HELL</p></div>
+                        <span class="m-item-price">3,50 / 5,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">KÖSTRITZER DUNKEL</p></div>
+                        <span class="m-item-price">3,50 / 5,00 €</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">FLASCHENBIER</h3>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">BITBURGER ALKOHOLFREI</p><p class="m-item-desc">0,33 l</p></div>
+                        <span class="m-item-price">3,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BENEDIKTINER ALKOHOLFREI</p><p class="m-item-desc">0,5 l</p></div>
+                        <span class="m-item-price">5,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BENEDIKTINER DUNKEL</p><p class="m-item-desc">0,5 l</p></div>
+                        <span class="m-item-price">5,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">PAULANER ZITRONE ALKOHOLFREI</p><p class="m-item-desc">0,5 l</p></div>
+                        <span class="m-item-price">5,00 €</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">APERITIF</h3>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">LILLET WILDBERRY</p><p class="m-item-desc">Lillet, Minze, Himbeere</p></div>
+                        <span class="m-item-price">7,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">HUGO</p><p class="m-item-desc">Secco, Holunder, Minze, Limette, Soda</p></div>
+                        <span class="m-item-price">7,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">APEROL SPRITZ</p><p class="m-item-desc">Aperol, Secco, Soda, Orange, Minze</p></div>
+                        <span class="m-item-price">7,50 €</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">WEIßWEINE &amp; PROSECCO</h3>
+                <p class="m-sec-sub">0,2 l / 0,75 l</p>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">GRAUBURGUNDER</p></div>
+                        <span class="m-item-price">6,50 / 21,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">SILVANER</p></div>
+                        <span class="m-item-price">6,50 / 21,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">LUGANA</p></div>
+                        <span class="m-item-price">6,50 / 23,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">WEINSCHORLE</p></div>
+                        <span class="m-item-price">4,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">PROSECCO</p><p class="m-item-desc">0,1 l</p></div>
+                        <span class="m-item-price">3,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">PROSECCO AUF EIS</p></div>
+                        <span class="m-item-price">5,20 €</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">ROTWEINE</h3>
+                <p class="m-sec-sub">0,2 l / 0,75 l</p>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">PRIMITIVO</p></div>
+                        <span class="m-item-price">6,50 / 23,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">DORNFELDER</p></div>
+                        <span class="m-item-price">6,50 / 21,90 €</span>
                     </div>
                 </div>
             </div>
 
             <div class="m-sec">
                 <h3 class="m-sec-title">COCKTAILS</h3>
-                <p class="m-sec-sub">Klassiker &amp; eigene Kreationen</p>
+                <p class="m-sec-sub">Normale 8,90 € &nbsp;/&nbsp; Große 11,90 €</p>
                 <div class="m-items">
                     <div class="m-item">
-                        <div><p class="m-item-name">SCHRAUBBAR SLING</p><p class="m-item-desc">Hauscocktail: Bourbon, Orange Bitters, Honig, Ingwer</p></div>
-                        <span class="m-item-price">9,50 €</span>
+                        <div><p class="m-item-name">SEX ON THE BEACH</p><p class="m-item-desc">Vodka, Peach-Tree, Orange, Zitrone, Grenadine, Lime</p></div>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">APEROL SPRITZ</p><p class="m-item-desc">Aperol, Prosecco, Soda, Orangenscheibe</p></div>
-                        <span class="m-item-price">8,50 €</span>
+                        <div><p class="m-item-name">TEQUILA SUNRISE</p><p class="m-item-desc">Tequila Silver, Orange, Grenadine, Zitrone</p></div>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">LONG ISLAND ICE TEA</p><p class="m-item-desc">Vodka, Rum, Gin, Tequila, Triple Sec, Zitronensaft, Cola</p></div>
-                        <span class="m-item-price">11,00 €</span>
+                        <div><p class="m-item-name">COSMOPOLITAN</p><p class="m-item-desc">Vodka, Triple Sec, Zitrone, Lime, Cranberry</p></div>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">HUGO</p><p class="m-item-desc">Holunderblütensirup, Prosecco, Minze, Limette, Soda</p></div>
-                        <span class="m-item-price">8,00 €</span>
+                        <div><p class="m-item-name">RAZZ MOJITO</p><p class="m-item-desc">Bacardi Razz, Limette, Lime, Minze, Himbeeren, brauner Zucker, Soda</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">MOJITO</p><p class="m-item-desc">Brauner Rum, Limette, Lime, Minze, brauner Zucker, Soda</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">CAIPIRINHA</p><p class="m-item-desc">Vodka, Limette, Lime, brauner Zucker</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">CUBA LIBRE</p><p class="m-item-desc">Brauner Rum, Lime, Zitrone, Coca Cola</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">LONG ISLAND ICE TEA</p><p class="m-item-desc">Weißer Rum, Vodka, Gin, Triple Sec, Tequila Silver, Lime, Coca Cola</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">MELON ICE TEA</p><p class="m-item-desc">Vodka, weißer Rum, Tequila, Gin, Triple Sec, Melonenlikör, Lime, Zitronenlimonade</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">MARACUJA SPLITT</p><p class="m-item-desc">Maracuja, Orange, Caramell-Sirup, Sahne, Licor 43, weißer Rum</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BRAZIL SUNSHINE</p><p class="m-item-desc">Vodka, Karamell-Sirup, Melonenlikör, Lime, Ananas</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BEACH BABY</p><p class="m-item-desc">Vodka, Peach-Tree, Zitrone, Vanille-Sirup, Pfirsich, Orange</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">VANILLA SKY</p><p class="m-item-desc">Amaretto, Vanille-Sirup, Kahlúa, Milch</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">PINA COLADA</p><p class="m-item-desc">Weißer Rum, Ananas, Coconut Cream, Sahne</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">43ER COLADA</p><p class="m-item-desc">Licor 43, Ananas, Coconut Cream, Sahne</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">SWIMMING POOL</p><p class="m-item-desc">Weißer Rum, Blue Curacao, Ananas, Coconut Cream, Sahne</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">STRAWBERRY COLADA</p><p class="m-item-desc">Weißer Rum, Ananas, Erdbeer-Sirup, Erdbeeren, Coconut Cream, Sahne</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BANANA COLADA</p><p class="m-item-desc">Weißer Rum, Bananenlikör, Bananen-Sirup, Banane, Coconut Cream, Sahne</p></div>
                     </div>
                 </div>
             </div>
 
             <div class="m-sec">
-                <h3 class="m-sec-title">SHOTS</h3>
-                <p class="m-sec-sub">Für die echten Legenden</p>
+                <h3 class="m-sec-title">ALKOHOLFREIE COCKTAILS</h3>
+                <p class="m-sec-sub">Normale 6,90 € &nbsp;/&nbsp; Große 8,90 €</p>
                 <div class="m-items">
                     <div class="m-item">
-                        <div><p class="m-item-name">TEQUILA</p><p class="m-item-desc">2 cl, klassisch mit Salz und Limette</p></div>
-                        <span class="m-item-price">3,50 €</span>
+                        <div><p class="m-item-name">WAKE UP</p><p class="m-item-desc">Orange, Maracuja, Zitrone, Lime, Mandel-Sirup</p></div>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">JÄGERMEISTER</p><p class="m-item-desc">2 cl, eiskalt</p></div>
+                        <div><p class="m-item-name">SPORTSMAN</p><p class="m-item-desc">Ananas, Orange, Zitrone, Grenadine-Sirup</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">VIRGIN MOJITO</p><p class="m-item-desc">Limette, Minze, Lime, brauner Zucker, Ginger Ale</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">IPANEMA</p><p class="m-item-desc">Limette, brauner Zucker, Lime, Ginger Ale</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">SAFER SEX ON THE BEACH</p><p class="m-item-desc">Cranberry, Zitrone, Orange, Pfirsich, Grenadine</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">CREAMY COLADA</p><p class="m-item-desc">Coconut Cream, Sahne, Ananas</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">MARACOLADA</p><p class="m-item-desc">Coconut Cream, Sahne, Maracuja</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">VIRGIN STRAWBERRY COLADA</p><p class="m-item-desc">Coconut Cream, Sahne, Ananas, Erdbeeren</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">NICHTSCHWIMMER</p><p class="m-item-desc">Coconut Cream, Sahne, Blue Curacao-Sirup, Ananas</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">VIRGIN MARACUJA SPLITT</p><p class="m-item-desc">Maracuja, Caramell-Sirup, Sahne</p></div>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BIKER</p><p class="m-item-desc">Banane, Orange, Ananas, Grenadine, Sahne</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">SPIRITUOSEN</h3>
+                <p class="m-sec-sub">Jeweils 4 cl &nbsp;·&nbsp; +Mix (Softdrink) 2,50 € &nbsp;/&nbsp; Schweppes 3,00 €</p>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">WHISKY</p><p class="m-item-desc">Jack Daniel's · Jim Beam · Tullamore Dew · Ballentine's · Chivas Rega &nbsp;—&nbsp; Johnnie Walker Red L. 5,00 €</p></div>
+                        <span class="m-item-price">5,00 / 6,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">RUM</p><p class="m-item-desc">Bacardi Superior · Bacardi Razz · Havana Club 3 anos 5,00 € &nbsp;—&nbsp; Don Papa Baroko 7,00 €</p></div>
+                        <span class="m-item-price">5,00 / 7,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">GIN</p><p class="m-item-desc">Gordon's London Dry 5,00 € &nbsp;·&nbsp; Bombay Sapphire / Tanqueray London / Tanqueray Royale 6,00 € &nbsp;·&nbsp; Hendrick's Gin 7,00 €</p></div>
+                        <span class="m-item-price">5,00 – 7,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">VODKA</p><p class="m-item-desc">Smirnoff 5,00 € &nbsp;·&nbsp; Absolut 6,00 €</p></div>
+                        <span class="m-item-price">5,00 / 6,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">BITTER</p><p class="m-item-desc">Ramazzotti · Fernet Branca · Averna · Campari · Aperol · Jägermeister</p></div>
+                        <span class="m-item-price">5,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">LIKÖRE</p><p class="m-item-desc">Licor 43 · Bailey's · Sambuca Molinari · Amaretto</p></div>
+                        <span class="m-item-price">5,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">TEQUILA &amp; AQUAVIT</p><p class="m-item-desc">2 cl &nbsp;·&nbsp; Tequila Silver · Tequila Gold · Linie Aquavit · Ouzo 12</p></div>
+                        <span class="m-item-price">3,00 €</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">HEIßGETRÄNKE</h3>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">KAFFEE CREMA</p></div>
                         <span class="m-item-price">3,00 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">FIREBALL</p><p class="m-item-desc">2 cl Zimt-Whisky, perfekt für kalte Nächte</p></div>
+                        <div><p class="m-item-name">KAFFEE CREMA JUMBO</p></div>
+                        <span class="m-item-price">3,90 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">ESPRESSO</p></div>
+                        <span class="m-item-price">2,70 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">ESPRESSO DOPPELT</p></div>
+                        <span class="m-item-price">3,60 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">CAPPUCCINO</p></div>
                         <span class="m-item-price">3,50 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">WODKA</p><p class="m-item-desc">2 cl, pur oder on the rocks</p></div>
+                        <div><p class="m-item-name">MILCHKAFFEE</p></div>
+                        <span class="m-item-price">4,10 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">LATTE MACCHIATO</p></div>
+                        <span class="m-item-price">4,10 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">LATTE MACCHIATO FLAVOURED</p><p class="m-item-desc">Karamell oder Vanille</p></div>
+                        <span class="m-item-price">5,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">EISKAFFEE MIT SAHNE</p></div>
+                        <span class="m-item-price">4,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">EISSCHOKOLADE MIT SAHNE</p></div>
+                        <span class="m-item-price">4,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">HEIßE SCHOKOLADE</p></div>
+                        <span class="m-item-price">3,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">TEESORTEN</p><p class="m-item-desc">Schwarz · Grün · Kamille · Pfefferminz · Früchte</p></div>
                         <span class="m-item-price">2,80 €</span>
                     </div>
                 </div>
@@ -1956,27 +2405,56 @@
 
             <div class="m-sec">
                 <h3 class="m-sec-title">SOFTDRINKS</h3>
-                <p class="m-sec-sub">Alkoholfrei &amp; erfrischend</p>
                 <div class="m-items">
                     <div class="m-item">
-                        <div><p class="m-item-name">COCA-COLA / LIGHT</p><p class="m-item-desc">0,33 l, eiskalt</p></div>
-                        <span class="m-item-price">3,20 €</span>
+                        <div><p class="m-item-name">JORDA GOURMET / NATURELLE</p><p class="m-item-desc">0,25 l / 0,75 l</p></div>
+                        <span class="m-item-price">2,60 / 6,00 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">BIONADE</p><p class="m-item-desc">Holunder oder Ingwer-Orange, 0,33 l</p></div>
+                        <div><p class="m-item-name">COCA COLA</p><p class="m-item-desc">0,3 l / 0,5 l</p></div>
+                        <span class="m-item-price">3,30 / 4,80 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">COCA COLA ZERO · SPEZI · FANTA · SPRITE</p><p class="m-item-desc">0,3 l / 0,5 l</p></div>
+                        <span class="m-item-price">3,30 / 4,80 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">VITAMALZ</p><p class="m-item-desc">0,33 l</p></div>
                         <span class="m-item-price">3,50 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">WASSER</p><p class="m-item-desc">Still oder mit Kohlensäure, 0,5 l</p></div>
-                        <span class="m-item-price">2,50 €</span>
+                        <div><p class="m-item-name">RED BULL</p><p class="m-item-desc">0,25 l</p></div>
+                        <span class="m-item-price">4,00 €</span>
                     </div>
                     <div class="m-item">
-                        <div><p class="m-item-name">FRESH JUICE</p><p class="m-item-desc">Orange, Apfel oder Multivitamin, 0,3 l</p></div>
-                        <span class="m-item-price">3,80 €</span>
+                        <div><p class="m-item-name">SCHWEPPES TONIC · GINGER · LEMON</p><p class="m-item-desc">0,2 l</p></div>
+                        <span class="m-item-price">3,00 €</span>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="m-sec">
+                <h3 class="m-sec-title">SÄFTE &amp; SCHORLEN</h3>
+                <p class="m-sec-sub">Orange · Apfel · Pfirsich · Kirsch · Banane · Maracuja · Cranberry · Rhabarber · Ananas</p>
+                <div class="m-items">
+                    <div class="m-item">
+                        <div><p class="m-item-name">VAIHINGER SAFT</p><p class="m-item-desc">0,3 l / 0,5 l</p></div>
+                        <span class="m-item-price">4,00 / 6,00 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">SAFTSCHORLE</p><p class="m-item-desc">0,3 l / 0,5 l</p></div>
+                        <span class="m-item-price">3,50 / 5,50 €</span>
+                    </div>
+                    <div class="m-item">
+                        <div><p class="m-item-name">DURSTLÖSCHER</p><p class="m-item-desc">0,5 l &nbsp;·&nbsp; Minze-Holunderblüte · Apfel-Rhabarber · Limette-Mango-Minze · Limette-Apfel-Minze · Limette-Himbeer-Minze · Ananas-Limette</p></div>
+                        <span class="m-item-price">5,50 €</span>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end m-panel-body drinks -->
+        <div class="m-panel-fade"></div>
+        <button class="m-show-more" aria-expanded="false">Gesamte Karte ansehen ↓</button>
+        </div><!-- end panel-drinks -->
     </div>
 </section>
 
@@ -2355,25 +2833,24 @@
         nav.classList.toggle('lit', window.scrollY > 50);
     }, { passive: true });
 
-    /* ------ Mobile hamburger ------ */
-    var burger  = document.getElementById('burger');
-    var mobNav  = document.getElementById('mobNav');
-    var mobLnks = document.querySelectorAll('.mob-lnk');
+    /* ------ Mobile circular hamburger ------ */
+    var hamWrap   = document.getElementById('hamWrap');
+    var hamToggle = document.getElementById('hamToggle');
 
-    function closeMenu() {
-        mobNav.classList.remove('open');
-        burger.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
+    function closeHam() {
+        hamWrap.classList.remove('open');
+        hamToggle.setAttribute('aria-expanded', 'false');
     }
-    burger.addEventListener('click', function () {
-        var opening = !mobNav.classList.contains('open');
-        mobNav.classList.toggle('open');
-        burger.classList.toggle('open');
-        burger.setAttribute('aria-expanded', opening);
+    hamToggle.addEventListener('click', function () {
+        var opening = !hamWrap.classList.contains('open');
+        hamWrap.classList.toggle('open');
+        hamToggle.setAttribute('aria-expanded', String(opening));
     });
-    mobLnks.forEach(function (l) { l.addEventListener('click', closeMenu); });
+    document.querySelectorAll('.ham-item').forEach(function (item) {
+        item.addEventListener('click', closeHam);
+    });
     document.addEventListener('click', function (e) {
-        if (!nav.contains(e.target) && !mobNav.contains(e.target)) closeMenu();
+        if (!hamWrap.contains(e.target)) closeHam();
     });
 
     /* ------ Newsletter popup ------ */
@@ -2446,6 +2923,49 @@
     var tabs   = document.querySelectorAll('.m-tab');
     var panels = document.querySelectorAll('.m-panel');
 
+    function initCollapse(panel) {
+        var body = panel.querySelector('.m-panel-body');
+        var fade = panel.querySelector('.m-panel-fade');
+        var btn  = panel.querySelector('.m-show-more');
+        if (!body || !btn || body.dataset.collapseInit) return;
+        body.dataset.collapseInit = '1';
+
+        if (body.scrollHeight <= 640) {
+            fade.style.display = 'none';
+            btn.style.display  = 'none';
+            return;
+        }
+
+        btn.addEventListener('click', function () {
+            var expanded = btn.getAttribute('aria-expanded') === 'true';
+            if (!expanded) {
+                body.style.maxHeight = body.scrollHeight + 'px';
+                fade.style.opacity = '0';
+                btn.setAttribute('aria-expanded', 'true');
+                btn.textContent = 'Weniger anzeigen ↑';
+                body.addEventListener('transitionend', function h() {
+                    body.style.maxHeight = 'none';
+                    body.style.overflow  = 'visible';
+                    body.removeEventListener('transitionend', h);
+                });
+            } else {
+                body.style.overflow  = 'hidden';
+                body.style.maxHeight = body.scrollHeight + 'px';
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        body.style.maxHeight = '620px';
+                        fade.style.opacity = '1';
+                        btn.setAttribute('aria-expanded', 'false');
+                        btn.textContent = 'Gesamte Karte ansehen ↓';
+                        panel.closest('section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                });
+            }
+        });
+    }
+
+    document.querySelectorAll('.m-panel.on').forEach(initCollapse);
+
     tabs.forEach(function (tab) {
         tab.addEventListener('click', function () {
             var target = this.dataset.tab;
@@ -2456,7 +2976,9 @@
             panels.forEach(function (p) { p.classList.remove('on'); });
             this.classList.add('on');
             this.setAttribute('aria-selected', 'true');
-            document.getElementById('panel-' + target).classList.add('on');
+            var panel = document.getElementById('panel-' + target);
+            panel.classList.add('on');
+            initCollapse(panel);
         });
     });
 
